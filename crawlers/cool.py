@@ -7,7 +7,7 @@ import json
 
 from models import Announcement
 import config
-from crawlers.base import BaseCrawler
+from . import BaseCrawler
 
 class NTUCoolCrawler(BaseCrawler):
     

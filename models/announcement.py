@@ -55,9 +55,6 @@ class Announcement(Base):
     def date_str(self):
         return self.date.strftime("%Y-%m-%d")
 
-    def get_raw_content(self):
-        return self.content if self.content else "(empty)"
-
     def get_text_content(self):
         if not self.content:
             return "(empty)"
@@ -78,6 +75,12 @@ class Announcement(Base):
         date = self.date_str()
         content = self.get_text_content()
         return f"Announcement of {self.classname} at {date} - {self.title}:\n\n{content}\n"
+
+    def dict(self, text_content = False):
+        ret = {c.name: getattr(self, c.name) for c in self.__table__.columns}
+        if text_content:
+            ret["content"] = self.get_text_content()
+        return ret
 
     def save(self, session):
         self.digest = self.hash()

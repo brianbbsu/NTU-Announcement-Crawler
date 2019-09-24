@@ -7,7 +7,7 @@ from dateutil.tz import gettz
 
 from models import Announcement
 import config
-from crawlers.base import BaseCrawler
+from . import BaseCrawler
 
 class CeibaCrawler(BaseCrawler):
 

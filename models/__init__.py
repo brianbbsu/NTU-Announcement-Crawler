@@ -1,5 +1,4 @@
-from sqlalchemy.ext.declarative import declarative_base
-
-Base = declarative_base()
-
+from .db import Base, Session, engine
 from .announcement import Announcement
+
+Base.metadata.create_all(engine)

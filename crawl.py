@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
-import config
-from models import Announcement, Base
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from models import Announcement, Base, Session
+
+from crawlers import crawler_list
 
 def get_announcements():
     """
-        Get all announcements using crawlers listed in config
+        Get all announcements using crawlers listed in crawlers/__init__.py
     """
     annos = []
-    for crawler_cls in config.crawler_list:
+    for crawler_cls in crawler_list:
         c = crawler_cls()
         print("Getting announcement from {}...".format(c.identifier))
         new_annos = c.get_announcements()
@@ -19,7 +18,7 @@ def get_announcements():
         annos += new_annos
     return annos
 
-def update_database(Session, annos):
+def update_database(annos):
     """
         Update database with new list of announcements.
         Old annoucements will be marked as "not present"
@@ -40,10 +39,7 @@ def update_database(Session, annos):
         session.close()
 
 def crawl():
-    engine = create_engine('sqlite:///db.sqlite3')
-    Base.metadata.create_all(engine)
-    Session = sessionmaker(bind = engine)
     annos = get_announcements()
     print("Total: {} announcement(s)".format(len(annos)))
-    update_database(Session, annos)
+    update_database(annos)
 
