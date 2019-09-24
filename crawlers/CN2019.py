@@ -6,7 +6,7 @@ import dateutil.parser
 from dateutil.tz import gettz
 import json
 
-from models.announcement import Announcement
+from models import Announcement
 import config
 from crawlers.base import BaseCrawler
 
@@ -38,8 +38,8 @@ class CN2019Crawler(BaseCrawler):
                 content = p.find(class_ = "title").next_sibling.strip()
                 date = self._get_time_from_post(p)
                 url = self.url
-                class_name = "Computer Networks 2019"
-                anno = Announcement(title = title, content = content, date = date, url = url, pos = it, class_name = class_name)
+                classname = "Computer Networks 2019"
+                anno = Announcement(title = title, content = content, date = date, url = url, pos = it, classname = classname)
                 annos.append(anno)
                 it += 1
         return annos

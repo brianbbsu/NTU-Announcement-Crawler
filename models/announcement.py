@@ -2,19 +2,56 @@ import datetime
 import hashlib
 from bs4 import BeautifulSoup as bs4
 
-class Announcement(object):
+from . import Base
+from sqlalchemy import Column, Integer, String, DateTime, Boolean
+
+
+class Announcement(Base):
     """
     Anno Structure
     {
       url: "Link to the anno or Link to the annos page",
-      class_name: "Name of the class",
+      classname: "Name of the class",
       crawler: "identifier of the crawler",
       date: "Announce Date of the anno",
       pos: "position within the class (smaller is newer, should be uniq, for sorting)",
       title: "Title of the anno",
-      content: "Content of the anno" (in original html code)
+      content: "Content of the anno" (in original html code),
     }
     """
+    __tablename__ = "announcements"
+
+    # pk of the anno in the DB
+    id = Column(Integer, primary_key = True)
+
+    # digest of the anno, calculated with self.hash()
+    digest = Column(String, unique = True, nullable = False)
+
+    # URL to the anno or annos page
+    url = Column(String)
+
+    # Crawler identifier
+    crawler = Column(String, nullable = False)
+
+    # Class Name
+    classname = Column(String, nullable = False)
+
+    # Title of the anno
+    title = Column(String, nullable = False)
+
+    # Content in raw html of the anno
+    content = Column(String, nullable = False)
+
+    # Announce date of the anno
+    date = Column(DateTime, nullable = False)
+
+    # position of the anno relative to other annos from the same (crawler, classname)
+    # Smaller is newer
+    pos = Column(Integer, nullable = False)
+
+    # Present?
+    present = Column(Boolean, nullable = False, default = True)
+
     def date_str(self):
         return self.date.strftime("%Y-%m-%d")
 
@@ -28,27 +65,28 @@ class Announcement(object):
             return "\n".join(bs4(self.content, "html.parser").stripped_strings)
 
     def hash(self):
-        # Consider crawler identifier, class_name, title, content, date
-        s = self.crawler +  self.class_name + self.title + self.content + self.date_str()
+        # Consider crawler identifier, classname, title, content, date
+        s = self.crawler +  self.classname + self.title + self.content + self.date_str()
         h = hashlib.sha1()
         h.update(s.encode("UTF-8"))
         return h.hexdigest()
 
     def basic_info(self):
-        return f"{self.class_name} - title: {self.title} ({self.date_str()})"
+        return f"{self.classname} - title: {self.title} ({self.date_str()})"
 
     def __str__(self):
         date = self.date_str()
         content = self.get_text_content()
-        return f"Announcement of {self.class_name} at {date} - {self.title}:\n\n{content}\n"
+        return f"Announcement of {self.classname} at {date} - {self.title}:\n\n{content}\n"
 
-    def __init__(self, url=None, class_name="Undefined", \
-                    date=datetime.date(1970, 1, 1), pos = 0, title = "", content="", crawler = None):
-        self.url = url
-        self.class_name = class_name
-        self.date = date
-        self.pos = pos
-        self.title = title
-        self.content = content
-        self.crawler = None
-
+    def save(self, session):
+        self.digest = self.hash()
+        anno = session.query(Announcement).filter_by(digest = self.digest).first()
+        if anno:
+            # Update fields not used for calculation of digest
+            anno.present = True
+            anno.url = self.url
+            anno.pos = self.pos
+        else:
+            anno = self
+        session.add(anno)

@@ -5,7 +5,7 @@ import datetime
 import dateutil.parser
 from dateutil.tz import gettz
 
-from models.announcement import Announcement
+from models import Announcement
 import config
 from crawlers.base import BaseCrawler
 
@@ -28,7 +28,7 @@ class CeibaCrawler(BaseCrawler):
         table = bs4(req.text, "html.parser").find("table")
         rows = table.findAll("tr")
         title = rows[0].find("td").string
-        content = "\n".join(rows[5].find("td").stripped_strings)
+        content = str(rows[5].find("td"))
         date = dateutil.parser.parse(rows[1].find("td").string)
         date = date.replace(tzinfo = gettz("Asia/Taipei"))
         return Announcement(title = title, content = content, url = url, date = date)
@@ -80,14 +80,14 @@ class CeibaCrawler(BaseCrawler):
             class_table = bs4(class_table_req.text, "html.parser").find("table").findAll("tr")[1:]
             
             for cls in class_table:
-                class_name_cell = cls.findAll("td")[4].find("a")
-                class_name = class_name_cell.string
-                class_url = class_name_cell.get('href')
+                classname_cell = cls.findAll("td")[4].find("a")
+                classname = classname_cell.string
+                class_url = classname_cell.get('href')
                 class_id = self._get_class_id_from_url(class_url)
                 class_annos = self._get_announcements_from_class_id(class_id)
                 if class_annos:
                     for anno in class_annos:
-                        anno.class_name = class_name
+                        anno.classname = classname
                     annos += class_annos
         return annos
 

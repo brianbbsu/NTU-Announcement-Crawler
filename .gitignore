@@ -1,6 +1,8 @@
 # For the project
 
 config.py
+db.sqlite3
+*.swp
 
 
 # Byte-compiled / optimized / DLL files

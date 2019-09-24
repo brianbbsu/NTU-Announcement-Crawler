@@ -5,7 +5,7 @@ import datetime
 import dateutil.parser
 import json
 
-from models.announcement import Announcement
+from models import Announcement
 import config
 from crawlers.base import BaseCrawler
 
@@ -19,7 +19,7 @@ class NTUCoolCrawler(BaseCrawler):
         annos = []
         it = 0
         for anno in dt:
-            content = "\n".join(bs4(anno["message"], "html.parser").stripped_strings)
+            content = anno["message"]
             annos.append(Announcement(url = anno["url"], date = dateutil.parser.parse(anno["posted_at"]), pos = it, title = anno["title"], content = content))
             it += 1
         return annos
@@ -49,10 +49,9 @@ class NTUCoolCrawler(BaseCrawler):
             courses = self._get_courses(s)
             annos = []
             for c in courses:
-                print(c["name"], c["id"])
                 course_annos = self._get_announcements_from_class_id(s, c["id"])
                 for anno in course_annos:
-                    anno.class_name = c["name"]
+                    anno.classname = c["name"]
                 annos += course_annos
         return annos
 
