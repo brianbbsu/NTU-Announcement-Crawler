@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
-import threading
-import time
-import traceback
-
 from models import Announcement, Base, Session
-
 from crawlers import crawler_list
 
 def get_announcements():
@@ -49,27 +44,6 @@ def crawl():
     annos = get_announcements()
     print("Total: {} announcement(s)".format(len(annos)))
     update_database(annos)
-
-def daemon_job(interval):
-    """
-        main function of the crawler daemon.
-        interval: time in seconds between each crawl
-    """
-    while True:
-        try:
-            crawl()
-        except:
-            traceback.print_exc()
-        time.sleep(interval)
-
-def start_daemon(interval = 600):
-    """
-        Start crawler daemon in new thread.
-        re-crawl every `interval` seconds
-    """
-    thread = threading.Thread(target = daemon_job, args=(interval, ))
-    thread.daemon = True
-    thread.start()
 
 if __name__ == "__main__":
     crawl()

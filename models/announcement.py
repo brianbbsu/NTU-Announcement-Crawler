@@ -3,8 +3,7 @@ import hashlib
 from bs4 import BeautifulSoup as bs4
 
 from . import Base
-from sqlalchemy import Column, Integer, String, DateTime, Boolean
-
+from sqlalchemy import Column, Integer, String, DateTime, Boolean, desc
 
 class Announcement(Base):
     """
@@ -52,14 +51,20 @@ class Announcement(Base):
     # Present?
     present = Column(Boolean, nullable = False, default = True)
 
+    __mapper_args__ = {
+        "order_by": (desc(date), pos)
+    }
+
     def date_str(self):
         return self.date.strftime("%Y-%m-%d")
 
     def get_text_content(self):
-        if not self.content:
-            return "(empty)"
+        ret = "" if self.content is None \
+                else "\n".join(bs4(self.content, "html.parser").stripped_strings)
+        if ret == "":
+            return "(Empty announcement.)"
         else:
-            return "\n".join(bs4(self.content, "html.parser").stripped_strings)
+            return ret
 
     def hash(self):
         # Consider crawler identifier, classname, title, content, date
