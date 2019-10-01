@@ -30,8 +30,8 @@ class NTUCoolCrawler(BaseCrawler):
         data1 = {}
         for inp in form1.findAll("input"):
             data1[inp.get("name")] = inp.get("value") or ""
-        data1["ctl00$ContentPlaceHolder1$UsernameTextBox"] = config.ntu_user
-        data1["ctl00$ContentPlaceHolder1$PasswordTextBox"] = config.ntu_pass
+        data1["ctl00$ContentPlaceHolder1$UsernameTextBox"] = config.get("ntu_user")
+        data1["ctl00$ContentPlaceHolder1$PasswordTextBox"] = config.get("ntu_pass")
         login_req = s.post("https://adfs.ntu.edu.tw/" + form1.get("action"), data = data1, allow_redirects=True)
         form2 = bs4(login_req.text, "html.parser").find("form")
         data2 = {}

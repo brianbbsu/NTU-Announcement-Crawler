@@ -1,6 +1,6 @@
 # For the project
 
-config.py
+config.yaml
 db.sqlite3
 *.swp
 

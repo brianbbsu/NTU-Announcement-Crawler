@@ -9,8 +9,9 @@ import config
 
 def process_notification():
     session = Session()
+    tg_chat_id = config.get("telegram_chat_id")
     subq = session.query(PushRecord) \
-        .filter_by(telegram_chat_id = config.telegram_chat_id).subquery()
+        .filter_by(telegram_chat_id = tg_chat_id).subquery()
     new_announcements = session.query(Announcement).filter_by(present=True) \
         .outerjoin(subq, Announcement.id == subq.c.announcement_id) \
         .filter(subq.c.id == None).all()
@@ -24,8 +25,8 @@ def process_notification():
     for anno in new_announcements:
         try:
             session = Session()
-            push_telegram_notification(anno, config.telegram_chat_id)
-            session.add(PushRecord(announcement_id = anno.id, telegram_chat_id = config.telegram_chat_id))
+            push_telegram_notification(anno, tg_chat_id)
+            session.add(PushRecord(announcement_id = anno.id, telegram_chat_id = tg_chat_id))
             session.commit()
         except:
             session.rollback()

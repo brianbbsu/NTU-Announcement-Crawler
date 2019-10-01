@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
-from models import Announcement, Base, Session
-from crawlers import crawler_list
+from models import Announcement, Session
+import config
+import crawlers
 
 def get_announcements():
     """
         Get all announcements using crawlers listed in crawlers/__init__.py
     """
     annos = []
-    for crawler_cls in crawler_list:
+    for crawler_name in config.get("crawler_list"):
+        crawler_cls = getattr(crawlers, crawler_name)
         c = crawler_cls()
         print("Getting announcement from {}...".format(c.identifier))
         new_annos = c.get_announcements()

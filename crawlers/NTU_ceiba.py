@@ -62,8 +62,8 @@ class CeibaCrawler(BaseCrawler):
     def _login(self):
         pre_login_req = self.s.get("https://web2.cc.ntu.edu.tw/p/s/login2/p6.php?url=https://ceiba.ntu.edu.tw/ChkSessLib.php", allow_redirects=True)
         login_req = self.s.post("https://web2.cc.ntu.edu.tw/p/s/login2/p1.php", data={
-            "user": config.ntu_user,
-            "pass": config.ntu_pass
+            "user": config.get("ntu_user"),
+            "pass": config.get("ntu_pass")
         }, allow_redirects=True)
         post_login_req = self.s.get("https://ceiba.ntu.edu.tw/ChkSessLib.php", allow_redirects=True)
         if post_login_req.url != "https://ceiba.ntu.edu.tw/student/index.php":
