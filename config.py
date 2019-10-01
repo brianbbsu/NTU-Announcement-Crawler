@@ -4,7 +4,7 @@ import yaml
 
 def get(key):
     with open("config.yaml", "r") as f:
-        data = yaml.load(f)
+        data = yaml.load(f, Loader=yaml.FullLoader)
     try:
         return data[key]
     except:
