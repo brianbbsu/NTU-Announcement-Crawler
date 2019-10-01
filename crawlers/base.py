@@ -1,5 +1,6 @@
 import abc
 
+
 class BaseCrawler(abc.ABC):
     """
         Base class for a crawler
@@ -10,12 +11,14 @@ class BaseCrawler(abc.ABC):
             return the identifier of this crawler
         """
         if not hasattr(self, "_identifier"):
-            raise Exception("The crawler implemtation didn't set the _identifier var.")
+            raise Exception(("The crawler implemtation didn't"
+                             "set the _identifier var."))
         return self._identifier
 
     @abc.abstractmethod
     def get_announcements(self):
         """
-            return an array of Announcement object, represents annoumcements got from this crawler.
+            return an array of Announcement object, represents
+            annoumcements got from this crawler.
         """
         raise NotImplementedError
