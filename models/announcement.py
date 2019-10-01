@@ -81,10 +81,9 @@ class Announcement(Base):
         content = self.get_text_content()
         return f"Announcement of {self.classname} at {date} - {self.title}:\n\n{content}\n"
 
-    def dict(self, text_content = False):
+    def dict(self):
         ret = {c.name: getattr(self, c.name) for c in self.__table__.columns}
-        if text_content:
-            ret["content"] = self.get_text_content()
+        ret["text_content"] = self.get_text_content()
         return ret
 
     def save(self, session):
