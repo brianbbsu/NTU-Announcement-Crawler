@@ -1,4 +1,4 @@
-from models import Session
+from models import Session, Announcement
 from flask import Flask, jsonify, render_template, send_from_directory, abort
 from utils import get_submission_list
 
@@ -23,11 +23,13 @@ def api_main():
 
 @app.route('/ann/<path:path>')
 def ann(path):
-    announcements = get_submission_list()
-    announcement = next((x for x in announcements if x['digest'] == path), None)
-    if not announcement:
+    session = Session()
+    announcements = session.query(Announcement).filter_by(present=True, digest=path).all()
+    if not announcements:
         abort(404)
-    return render_template('ann.html', announcement=announcement)
+    if len(announcements) > 1:
+        abort(500)
+    return render_template('ann.html', announcement=announcements[0])
 
 
 @app.route('/')
