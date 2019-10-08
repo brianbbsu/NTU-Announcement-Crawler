@@ -8,7 +8,7 @@
     <link href='https://cdnjs.cloudflare.com/ajax/libs/tocas-ui/2.3.3/tocas.css' rel='stylesheet' type='text/css'>
     <style>
         body {
-            background-color: rgb(234, 243, 203);
+            background-color: rgb(203, 243, 215);
         }
 
         .ts.surrounded {
@@ -28,8 +28,8 @@
             <thead>
                 <tr>
                     <th class="four wide">課程</th>
-                    <th class="seven wide">標題</th>
-                    <th class="three wide">日期</th>
+                    <th class="eight wide">標題</th>
+                    <th class="two wide">日期</th>
                     <th class="two wide">來源</th>
                 </tr>
             </thead>
@@ -43,8 +43,8 @@
                 <tr class="info indicated">
                 {% endif %}
                     <td>{{announcement.classname}}</td>
-                    <td><a href="/ann/{{announcement.digest}}" target="_blank">{{announcement.title}}</a></td>
-                    <td>{{announcement.date}}</td>
+                    <td><a href="/ann/{{announcement.digest}}">{{announcement.title}}</a></td>
+                    <td>{{announcement.date.strftime('%Y-%m-%d')}}</td>
                     <td><a href="{{announcement.url}}" target="_blank">{{announcement.crawler}}</a></td>
                 </tr>
                 {% endfor %}

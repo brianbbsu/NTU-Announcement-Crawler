@@ -27,21 +27,11 @@ def ann(path):
     announcement = next((x for x in announcements if x['digest'] == path), None)
     if not announcement:
         abort(404)
-    return render_template('ann.html', ann=announcement)
-
-
-@app.route('/js/<path:path>')
-def js(path):
-    return send_from_directory('static/javascripts', path)
-
-
-@app.route('/css/<path:path>')
-def css(path):
-    return send_from_directory('static/stylesheets', path)
+    return render_template('ann.html', announcement=announcement)
 
 
 @app.route('/')
-def index():
+def index():    
     return render_template('index.html', announcements=get_submission_list())
 
 
