@@ -1,6 +1,7 @@
 from models import Session, Announcement
 from flask import Flask, jsonify, render_template, send_from_directory, abort
 from utils import get_submission_list
+import config
 
 
 app = Flask(__name__)
@@ -38,7 +39,7 @@ def index():
 
 
 def run():
-    app.run()
+    app.run(host=config.get('host'), port=config.get('port'))
 
 
 if __name__ == '__main__':
