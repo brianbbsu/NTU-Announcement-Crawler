@@ -1,5 +1,5 @@
 from models import Session
-from flask import Flask, jsonify, send_from_directory
+from flask import Flask, jsonify, render_template, send_from_directory, abort
 from utils import get_submission_list
 
 
@@ -21,14 +21,28 @@ def api_main():
     return jsonify(get_submission_list())
 
 
-@app.route('/<path:path>')
-def server(path):
-    return send_from_directory('public', path)
+@app.route('/ann/<path:path>')
+def ann(path):
+    announcements = get_submission_list()
+    announcement = next((x for x in announcements if x['digest'] == path), None)
+    if not announcement:
+        abort(404)
+    return render_template('ann.html', ann=announcement)
+
+
+@app.route('/js/<path:path>')
+def js(path):
+    return send_from_directory('static/javascripts', path)
+
+
+@app.route('/css/<path:path>')
+def css(path):
+    return send_from_directory('static/stylesheets', path)
 
 
 @app.route('/')
 def index():
-    return send_from_directory('public', 'index.html')
+    return render_template('index.html', announcements=get_submission_list())
 
 
 def run():

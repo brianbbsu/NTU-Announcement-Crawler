@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh_TW">
+
+<head>
+    <title>NTU Announcement</title>
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/tocas-ui/2.3.3/tocas.css' rel='stylesheet' type='text/css'>
+    <style>
+        body {
+            background-color: rgb(234, 243, 203);
+        }
+
+        .ts.surrounded {
+            padding: 1.8em !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="ts fluid top link huge menu">
+        <div class="ts narrow container">
+            <a class="item" href="/">NTU Announcement</a>
+        </div>
+    </div>
+    <div class="ts narrow container surrounded">
+        <table class="ts attatched selectable striped celled table">
+            <thead>
+                <tr>
+                    <th class="four wide">課程</th>
+                    <th class="seven wide">標題</th>
+                    <th class="three wide">日期</th>
+                    <th class="two wide">來源</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for announcement in announcements %}
+                {% if announcement.crawler == 'NTU Cool' %}
+                <tr class="primary indicated">
+                {% elif announcement.crawler == 'NTU Ceiba' %}
+                <tr class="positive indicated">
+                {% else %}
+                <tr class="info indicated">
+                {% endif %}
+                    <td>{{announcement.classname}}</td>
+                    <td><a href="/ann/{{announcement.digest}}" target="_blank">{{announcement.title}}</a></td>
+                    <td>{{announcement.date}}</td>
+                    <td><a href="{{announcement.url}}" target="_blank">{{announcement.crawler}}</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>
