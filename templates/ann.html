@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh_TW">
+
+<head>
+    <title>NTU Announcement</title>
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/tocas-ui/2.3.3/tocas.css' rel='stylesheet' type='text/css'>
+    <style>
+        body {
+            background-color: rgb(203, 243, 215);
+        }
+
+        .ts.surrounded {
+            padding: 1.8em !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="ts fluid top link huge menu">
+        <div class="ts narrow container">
+            <span class="item">NTU Announcement - {{announcement.classname}}</span>
+            <span class="item right">
+                <a href="/">
+                    <button class="ts mini very compact basic button">回列表</button>
+                </a>
+            </span>
+        </div>
+    </div>
+    <div class="ts narrow container surrounded">
+        <div class="ts segments">
+            <div class="ts inverted segment">
+                <div class="ts inverted header">
+                    {{announcement.title}}
+                </div>
+            </div>
+            <div class="ts segment">
+                日期：{{announcement.date.strftime('%Y-%m-%d')}}
+            </div>
+            <div class="ts segment">
+                來源：<a href="{{announcement.url}}" target="_blank">{{announcement.crawler}}</a>
+            </div>
+            <div class="ts segment">
+                {{announcement.content|safe}}
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

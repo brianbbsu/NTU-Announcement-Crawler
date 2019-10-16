@@ -1,5 +1,8 @@
 database_connection_string: "sqlite:///db.sqlite3"
 
+port: 8787
+host: '0'
+
 ntu_user: "b08902000"
 ntu_pass: "123456789"
 
