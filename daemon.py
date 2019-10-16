@@ -15,7 +15,7 @@ def process_notification():
         .filter_by(telegram_chat_id=tg_chat_id).subquery()
     new_announcements = session.query(Announcement).filter_by(present=True) \
         .outerjoin(subq, Announcement.id == subq.c.announcement_id) \
-        .filter(subq.c.id is None).all()
+        .filter(subq.c.id == None).all()
 
     new_announcements = new_announcements[::-1]  # Push old announcemt first
 
