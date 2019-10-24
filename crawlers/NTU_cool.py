@@ -33,7 +33,7 @@ class NTUCoolCrawler(BaseCrawler):
         pre_login_req = s.get("https://cool.ntu.edu.tw/login/saml")
         form1 = bs4(pre_login_req.text, "html.parser").find("form")
         data1 = {}
-        for inp in form1.findAll("input"):
+        for inp in form1.find_all("input"):
             data1[inp.get("name")] = inp.get("value") or ""
         data1["ctl00$ContentPlaceHolder1$UsernameTextBox"] \
             = config.get("ntu_user")
@@ -43,7 +43,7 @@ class NTUCoolCrawler(BaseCrawler):
                            data=data1, allow_redirects=True)
         form2 = bs4(login_req.text, "html.parser").find("form")
         data2 = {}
-        for inp in form2.findAll("input"):
+        for inp in form2.find_all("input"):
             data2[inp.get("name")] = inp.get("value") or ""
         post_login_req = s.post(form2.get("action"),
                                 data=data2, allow_redirects=True)
