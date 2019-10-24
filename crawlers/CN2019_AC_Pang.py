@@ -10,6 +10,7 @@ from models import Announcement
 import config
 from . import BaseCrawler
 
+
 class CN2019_AC_Pang_Crawler(BaseCrawler):
 
     _identifier = "Computer Networks 2019 (AC Pang)"
@@ -33,12 +34,12 @@ class CN2019_AC_Pang_Crawler(BaseCrawler):
                 result = prog.split(html_content)
                 for x in result:
                     if prog.match(x):
-                        arr.append([x,''])
+                        arr.append([x, ''])
                     elif len(arr):
                         arr[-1][1] += x
             annos = []
             it = 0
-            arr = sorted(arr,reverse=True)
+            arr = sorted(arr, reverse=True)
             for a in arr:
                 title = ''.join(bs4(a[1], "html.parser").strings).strip()[:20]
                 content = a[1]
