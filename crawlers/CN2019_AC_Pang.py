@@ -53,6 +53,6 @@ class CN2019_AC_Pang_Crawler(BaseCrawler):
 
 
 if __name__ == '__main__':
-    c = CN2019Crawler()
+    c = CN2019_AC_Pang_Crawler()
     annos = c.get_announcements()
     print(annos)
