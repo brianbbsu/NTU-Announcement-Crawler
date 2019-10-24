@@ -32,7 +32,7 @@ class CN2019Crawler(BaseCrawler):
         with requests.Session() as s:
             self.s = s
             r = s.get(self.url)
-            anno_divs = bs4(r.text, "html.parser").findAll(class_="post")
+            anno_divs = bs4(r.text, "html.parser").find_all(class_="post")
             annos = []
             it = 0
             for p in anno_divs:

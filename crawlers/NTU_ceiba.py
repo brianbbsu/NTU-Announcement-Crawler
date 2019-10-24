@@ -27,7 +27,7 @@ class CeibaCrawler(BaseCrawler):
         req = self.s.get(url)
         req.encoding = "UTF-8"
         table = bs4(req.text, "html.parser").find("table")
-        rows = table.findAll("tr")
+        rows = table.find_all("tr")
         title = rows[0].find("td").string
         content = str(rows[5].find("td"))
         date = dateutil.parser.parse(rows[1].find("td").string)
@@ -49,11 +49,11 @@ class CeibaCrawler(BaseCrawler):
             req = self.s.get(url)
             req.encoding = "UTF-8"
             table = bs4(req.text, "html.parser").find("table")
-            rows = table.findAll("tr")[1:]
+            rows = table.find_all("tr")[1:]
             if len(rows) == 0:
                 break
             for r in rows:
-                orig_url = r.findAll("td")[2].find("a").get("href")
+                orig_url = r.find_all("td")[2].find("a").get("href")
                 sn = re.search(r"sn=(\d+)", orig_url).group(1)
                 url = self.base_url \
                     + (f"modules/bulletin/bulletin_popup.php"
@@ -88,10 +88,10 @@ class CeibaCrawler(BaseCrawler):
             class_table_req = self.s.get(self.base_url + "student/index.php")
             class_table_req.encoding = "UTF-8"
             class_table = bs4(class_table_req.text, "html.parser").\
-                find("table").findAll("tr")[1:]
+                find("table").find_all("tr")[1:]
 
             for cls in class_table:
-                classname_cell = cls.findAll("td")[4].find("a")
+                classname_cell = cls.find_all("td")[4].find("a")
                 classname = classname_cell.string
                 class_url = classname_cell.get('href')
                 class_id = self._get_class_id_from_url(class_url)
