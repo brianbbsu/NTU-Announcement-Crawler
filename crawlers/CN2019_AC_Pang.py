@@ -31,10 +31,12 @@ class CN2019_AC_Pang_Crawler(BaseCrawler):
             for p in anno_divs:
                 html_content = ''.join(str(x) for x in p.contents)
                 result = prog.split(html_content)
+                new_anno = False
                 for x in result:
                     if prog.match(x):
                         arr.append([x,''])
-                    elif len(arr):
+                        new_anno = True
+                    elif new_anno:
                         arr[-1][1] += x
             annos = []
             it = 0
